@@ -86,10 +86,18 @@ namespace Picklr.Controllers
             return RedirectToAction("Index", new { clubId, date = date.ToString("yyyy-MM-dd") });
         }
 
-        // Placeholder pages -- out of scope for Phase 2.
-        public ContentResult About() => Content("About page — under construction.");
-        public ContentResult Club() => Content("Club page — under construction.");
-        public ContentResult Program() => Content("Program page — under construction.");
-        public ContentResult Shop() => Content("Shop page — under construction.");
+        // Placeholder pages -- out of scope for Phase 2. They return real
+        // views (rather than Content) so they render inside _MainLayout with
+        // the site's navbar and footer instead of as bare text.
+        public IActionResult About() => View();
+        public IActionResult Club() => View();
+        public IActionResult Shop() => View();
+
+        public IActionResult Program() => View();
+
+        // Target of app.UseExceptionHandler("/Home/Error") in Program.cs.
+        // Without this action that handler itself 404s, which turns any
+        // real error into a confusing secondary exception.
+        public IActionResult Error() => View();
     }
 }
