@@ -1,0 +1,86 @@
+@using System.Text.Json
+@{
+    Layout = "_Layout";
+
+    // Used to highlight the active nav link
+    string ctrl = ViewContext.RouteData.Values["controller"]?.ToString() ?? "";
+    string act  = ViewContext.RouteData.Values["action"]?.ToString() ?? "";
+
+    // Cart badge count -- read straight from Session here in the layout so
+    // every page shows an up-to-date count without every action having to
+    // set a ViewBag value.
+    var cartJson = Context.Session.GetString("Cart");
+    int cartCount = string.IsNullOrEmpty(cartJson)
+        ? 0
+        : (JsonSerializer.Deserialize<List<CartItem>>(cartJson)?.Count ?? 0);
+}
+
+<div class="container">
+    <header>
+        <nav class="navbar navbar-expand-md navbar-dark bg-success mt-2 rounded">
+            <div class="container-fluid">
+                <a class="navbar-brand fw-bold"
+                   asp-area="" asp-controller="Home" asp-action="Index">Picklr</a>
+
+                <button class="navbar-toggler" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#mainNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="mainNav">
+                    @* Left-side links *@
+                    <div class="navbar-nav me-auto">
+                        <a class="nav-item nav-link
+                             @(ctrl == "Home" && act == "About" ? "active" : "")"
+                           asp-area="" asp-controller="Home" asp-action="About">About</a>
+
+                        <a class="nav-item nav-link
+                             @(ctrl == "Home" && act == "Club" ? "active" : "")"
+                           asp-area="" asp-controller="Home" asp-action="Club">Club</a>
+
+                        <a class="nav-item nav-link
+                             @(ctrl == "Home" && act == "Program" ? "active" : "")"
+                           asp-area="" asp-controller="Home" asp-action="Program">Program</a>
+
+                        <a class="nav-item nav-link
+                             @(ctrl == "Home" && act == "Shop" ? "active" : "")"
+                           asp-area="" asp-controller="Home" asp-action="Shop">Shop</a>
+                    </div>
+
+                    @* Right-side Cart + Admin links *@
+                    <div class="navbar-nav ms-auto align-items-md-center">
+                        <a class="nav-item nav-link position-relative me-2"
+                           asp-area="" asp-controller="Cart" asp-action="Index">
+                            &#128722;
+                            @if (cartCount > 0)
+                            {
+                                <span class="position-absolute badge rounded-pill bg-danger"
+                                      style="top:0; right:-4px;">
+                                    @cartCount
+                                </span>
+                            }
+                        </a>
+
+                        <a class="nav-item nav-link"
+                           asp-area="Admin" asp-controller="Home" asp-action="Index">Admin</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        @* TempData confirmation message (used by CRUD, Reserve, Remove, Pay & Confirm, etc.) *@
+        @if (TempData.Keys.Contains("message"))
+        {
+            <div class="alert alert-success mt-2 text-center">@TempData["message"]</div>
+        }
+    </header>
+
+    <main>
+        @RenderBody()
+        @RenderSection("scripts", required: false)
+    </main>
+
+    <footer class="mt-4 py-3 border-top text-center text-muted">
+        <p>&copy; @DateTime.Now.Year Picklr &mdash; All rights reserved.</p>
+    </footer>
+</div>

@@ -1,0 +1,57 @@
+@{
+    Layout = "_Layout";
+
+    // Used to highlight the active nav link
+    string ctrl = ViewContext.RouteData.Values["controller"]?.ToString() ?? "";
+}
+
+<div class="container">
+    <header>
+        <nav class="navbar navbar-expand-md navbar-dark bg-danger mt-2 rounded">
+            <div class="container-fluid">
+                <a class="navbar-brand fw-bold"
+                   asp-area="Admin" asp-controller="Home" asp-action="Index">Picklr Admin</a>
+
+                <button class="navbar-toggler" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#adminNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="adminNav">
+                    @* Left-side CRUD links *@
+                    <div class="navbar-nav me-auto">
+                        <a class="nav-item nav-link @(ctrl == "Club" ? "active" : "")"
+                           asp-area="Admin" asp-controller="Club" asp-action="List">Club</a>
+
+                        <a class="nav-item nav-link @(ctrl == "Program" ? "active" : "")"
+                           asp-area="Admin" asp-controller="Program" asp-action="List">Program</a>
+
+                        <a class="nav-item nav-link @(ctrl == "User" ? "active" : "")"
+                           asp-area="Admin" asp-controller="User" asp-action="List">User</a>
+                    </div>
+
+                    @* Right-side Site link returns to the client-facing homepage *@
+                    <div class="navbar-nav ms-auto">
+                        <a class="nav-item nav-link"
+                           asp-area="" asp-controller="Home" asp-action="Index">Site</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        @* TempData confirmation message from CRUD operations *@
+        @if (TempData.Keys.Contains("message"))
+        {
+            <div class="alert alert-success mt-2 text-center">@TempData["message"]</div>
+        }
+    </header>
+
+    <main>
+        @RenderBody()
+        @RenderSection("scripts", required: false)
+    </main>
+
+    <footer class="mt-4 py-3 border-top text-center text-muted">
+        <p>&copy; @DateTime.Now.Year Picklr Admin Portal</p>
+    </footer>
+</div>

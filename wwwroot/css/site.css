@@ -1,0 +1,60 @@
+/* Picklr — site-specific styles */
+
+/* Tighten up the top margin on the main container */
+body {
+    padding-top: 0;
+}
+
+/* ── Homepage hero ─────────────────────────────────── */
+
+/* Container — sized to match the image's natural aspect ratio (2232 × 906) */
+.hero-section {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 2232 / 906;   /* keeps full image visible at any viewport width */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background-color: #f8f9fa;  /* shows behind transparent areas of a PNG */
+}
+
+/* The background image lives here so its opacity can be set independently */
+.hero-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url('/img/homepage_background.jpg');
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0.55;              /* lower = more faded; raise toward 1.0 to strengthen */
+}
+
+/* Text card sits above the faded image */
+.hero-overlay {
+    position: relative;         /* stacks above ::before */
+    background-color: rgba(255, 255, 255, 0.25);
+    color: #1a1a1a;
+    text-align: center;
+    padding: 2.5rem 2rem;
+    border-radius: 0.5rem;
+    max-width: 700px;
+    width: 90%;
+}
+
+.hero-overlay p {
+    color: #333;
+}
+
+/* Make footer text slightly smaller */
+footer p {
+    font-size: 0.875rem;
+    margin-bottom: 0;
+}
+
+/* Navbar brand font */
+.navbar-brand {
+    font-size: 1.4rem;
+    letter-spacing: 0.03em;
+}

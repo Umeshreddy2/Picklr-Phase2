@@ -1,0 +1,64 @@
+@model PicklProgram
+@{
+    ViewData["Title"] = ViewBag.Action + " Program";
+    List<Club> clubs = ViewBag.Clubs;
+    string[] allDays = { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
+}
+
+<h2 class="mt-3">@ViewBag.Action Program</h2>
+
+<form asp-action="AddEdit" method="post" class="mt-3" style="max-width:600px;">
+    <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
+
+    <input type="hidden" asp-for="ProgramID" />
+
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label"></label>
+        <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Fee" class="form-label"></label>
+        <div class="input-group">
+            <span class="input-group-text">$</span>
+            <input asp-for="Fee" class="form-control" />
+        </div>
+        <span asp-validation-for="Fee" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="ClubID" class="form-label"></label>
+        <select asp-for="ClubID" class="form-select"
+                asp-items="@(new SelectList(clubs, "ClubID", "Name"))">
+            <option value="">-- Select Club --</option>
+        </select>
+        <span asp-validation-for="ClubID" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label d-block">Available Days</label>
+        @foreach (var day in allDays)
+        {
+            bool isChecked = Model.AvailableDayList.Contains(day);
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" name="availableDays"
+                       value="@day" id="day_@day" checked="@isChecked" />
+                <label class="form-check-label" for="day_@day">@day</label>
+            </div>
+        }
+    </div>
+
+    <button type="submit" class="btn btn-primary">@ViewBag.Action</button>
+    <a asp-action="List" class="btn btn-secondary ms-2">Cancel</a>
+</form>
+
+@section scripts {
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"></script>
+}

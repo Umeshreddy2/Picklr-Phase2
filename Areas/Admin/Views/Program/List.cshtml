@@ -1,0 +1,40 @@
+@model List<PicklProgram>
+@{
+    ViewData["Title"] = "Programs";
+}
+
+<h2 class="mt-3">Programs</h2>
+
+<a asp-action="AddEdit" class="btn btn-primary mb-3">Add Program</a>
+
+<table class="table table-bordered table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>Name</th>
+            <th>Club</th>
+            <th>Available Days</th>
+            <th>Fee</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var program in Model)
+        {
+            <tr>
+                <td>@program.Name</td>
+                <td>@program.Club?.Name</td>
+                <td>@program.AvailableDaysDisplay</td>
+                <td>@program.Fee.ToString("C")</td>
+                <td>
+                    <a asp-action="AddEdit" asp-route-id="@program.ProgramID"
+                       class="btn btn-sm btn-outline-secondary">Edit</a>
+                </td>
+                <td>
+                    <a asp-action="Delete" asp-route-id="@program.ProgramID"
+                       class="btn btn-sm btn-outline-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

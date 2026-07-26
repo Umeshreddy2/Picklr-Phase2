@@ -1,0 +1,93 @@
+@model List<PicklProgram>
+@{
+    ViewData["Title"] = "Find a Program";
+    DateTime selectedDate = ViewBag.SelectedDate;
+    int? selectedClubId = ViewBag.SelectedClubId;
+    List<Club> clubs = ViewBag.Clubs;
+    List<DateTime> dateOptions = ViewBag.DateOptions;
+}
+
+<div class="row mt-3">
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-header bg-success text-white fw-bold">Filter Programs</div>
+            <div class="card-body">
+                <form asp-action="Index" method="get">
+                    <div class="mb-3">
+                        <label class="form-label">Club</label>
+                        <select name="clubId" class="form-select">
+                            <option value="" selected="@(selectedClubId == null)">All Clubs</option>
+                            @foreach (var club in clubs)
+                            {
+                                <option value="@club.ClubID" selected="@(selectedClubId == club.ClubID)">
+                                    @club.Name
+                                </option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Date</label>
+                        <select name="date" class="form-select">
+                            @foreach (var d in dateOptions)
+                            {
+                                string optionText = d == DateTime.Today
+                                    ? $"Today ({d:ddd, MMM d})"
+                                    : d.ToString("ddd, MMM d");
+                                <option value="@d.ToString("yyyy-MM-dd")" selected="@(d.Date == selectedDate.Date)">
+                                    @optionText
+                                </option>
+                            }
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-success w-100">Search</button>
+                    <a asp-action="Index" class="btn btn-outline-secondary w-100 mt-2">Clear</a>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-9">
+        <h2>Programs for @selectedDate.ToString("dddd, MMMM d")</h2>
+
+        @if (Model.Count == 0)
+        {
+            <div class="alert alert-info">No programs are available on this date.</div>
+        }
+        else
+        {
+            <table class="table table-bordered table-striped mt-2">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Program</th>
+                        <th>Club</th>
+                        <th>Fee</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var program in Model)
+                    {
+                        <tr>
+                            <td>
+                                <strong>@program.Name</strong><br />
+                                <span class="text-muted">@program.Description</span>
+                            </td>
+                            <td>@program.Club.Name</td>
+                            <td>@program.Fee.ToString("C")</td>
+                            <td>
+                                <form asp-action="Reserve" method="post">
+                                    <input type="hidden" name="programId" value="@program.ProgramID" />
+                                    <input type="hidden" name="date" value="@selectedDate.ToString("yyyy-MM-dd")" />
+                                    <input type="hidden" name="clubId" value="@selectedClubId" />
+                                    <button type="submit" class="btn btn-success btn-sm">Reserve</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</div>
