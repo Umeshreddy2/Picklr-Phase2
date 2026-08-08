@@ -23,6 +23,16 @@ builder.Services.AddSession(options =>
 
 var app = builder.Build();
 
+// Apply any pending EF Core migrations at startup. Locally this is a no-op
+// because the database is already up to date. On a fresh deployment (Azure)
+// there is no picklr.db file at all, so this creates it and seeds it --
+// otherwise every page would fail with "no such table: Clubs".
+using (var scope = app.Services.CreateScope())
+{
+    var ctx = scope.ServiceProvider.GetRequiredService<PicklrContext>();
+    ctx.Database.Migrate();
+}
+
 // Configure HTTP pipeline
 if (!app.Environment.IsDevelopment())
 {
