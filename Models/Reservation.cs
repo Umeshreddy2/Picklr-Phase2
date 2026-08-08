@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 namespace Picklr.Models
 {
     // A saved (paid) booking. Rows are only written here after the user
-    // clicks "Pay & Confirm" on the cart page -- before that, chosen
-    // programs live only in Session as CartItem objects (see CartItem.cs).
+    // completes the Checkout form -- before that, chosen programs live only
+    // in Session as CartItem objects (see CartItem.cs).
     public class Reservation
     {
         [Key]
@@ -29,5 +29,22 @@ namespace Picklr.Models
 
         [Display(Name = "Reserved On")]
         public DateTime ReservedOn { get; set; } = DateTime.Now;
+
+        // ---- Phase 3: who made the booking -------------------------------
+        // Captured on the Checkout form and copied onto every reservation in
+        // that order. CustomerEmail is what the remote validation queries to
+        // detect a duplicate booking.
+
+        [Display(Name = "Customer Name")]
+        public string CustomerName { get; set; } = string.Empty;
+
+        [Display(Name = "Email Address")]
+        public string CustomerEmail { get; set; } = string.Empty;
+
+        [Display(Name = "Phone Number")]
+        public string CustomerPhone { get; set; } = string.Empty;
+
+        [Display(Name = "Date of Birth")]
+        public DateTime? CustomerDOB { get; set; }
     }
 }

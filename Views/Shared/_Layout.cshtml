@@ -11,7 +11,13 @@
 <body>
     @RenderBody()
 
+    @* jQuery is needed by many views, so it stays in the layout.
+       The validation libraries are pulled in per-view via the scripts
+       section below, so pages that don't validate anything don't load
+       them (Ch11, slides 66-67). *@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    @await RenderSectionAsync("scripts", required: false)
 </body>
 </html>

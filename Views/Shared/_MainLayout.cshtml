@@ -77,10 +77,15 @@
 
     <main>
         @RenderBody()
-        @RenderSection("scripts", required: false)
     </main>
 
     <footer class="mt-4 py-3 border-top text-center text-muted">
         <p>&copy; @DateTime.Now.Year Picklr &mdash; All rights reserved.</p>
     </footer>
 </div>
+
+@* Pass any scripts section from the child view up to _Layout,
+   which renders it at the bottom of the page. *@
+@section scripts {
+    @await RenderSectionAsync("scripts", required: false)
+}

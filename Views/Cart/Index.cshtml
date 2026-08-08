@@ -47,9 +47,9 @@ else
         </tbody>
     </table>
 
-    <form asp-action="PayConfirm" method="post" class="d-inline">
-        <button type="submit" class="btn btn-success">Pay &amp; Confirm</button>
-    </form>
+    @* Phase 3: this now goes to the Checkout form instead of booking
+       immediately, so customer details can be collected and validated. *@
+    <a asp-action="Checkout" class="btn btn-success">Proceed to Checkout</a>
     <form asp-action="ClearAll" method="post" class="d-inline">
         <button type="submit" class="btn btn-outline-danger">Clear All</button>
     </form>

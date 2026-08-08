@@ -58,3 +58,23 @@ footer p {
     font-size: 1.4rem;
     letter-spacing: 0.03em;
 }
+
+/* ── Phase 3: validation styling (Ch11, slide 55) ──────────────── */
+
+/* Applied automatically by MVC to any input that fails validation */
+.input-validation-error {
+    border: 2px solid #dc3545;   /* same red as text-danger */
+    background-color: #faebd7;   /* antique white */
+}
+
+/* Hide the summary block entirely when there is nothing to report */
+.validation-summary-valid {
+    display: none;
+}
+
+/* Drop the bullet points from the summary list */
+.validation-summary-errors ul {
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 0;
+}
